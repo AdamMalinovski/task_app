@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/topic-tasks.css" />
+    <title>Topic Tasks</title>
+  </head>
+  <body>
+    <div class="page">
+      <h1>{{ topic.title }}</h1>
+
+      <div class="content">
+        <div class="task-content">
+          <div class="tasks">
+            <ul>
+              {% for task in tasks %}
+              <div>
+                <li>{{ task.description }}</li>
+                <form action="/delete/task/{{ task.task_id }}" method="POST">
+                  <input type="submit" value="Delete Task" />
+                </form>
+              </div>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="new-task">
+            <h3>Add a New Task</h3>
+            <form action="/add/task/{{ topic.topic_id }}" method="POST">
+              <div>
+                <!-- <label for="task">Task</label> -->
+                <input
+                  type="text"
+                  name="task-description"
+                  placeholder="Enter a New Task"
+                />
+              </div>
+
+              <input type="submit" value="Add Task" />
+            </form>
+          </div>
+        </div>
+
+        <div class="delete-topic">
+          <form action="/delete/topic/{{ topic.topic_id }}" method="POST">
+            <div>
+              <input type="submit" value="Delete This Topic" />
+            </div>
+          </form>
+        </div>
+
+        <div class="message">
+          {% for category, message in get_flashed_messages(with_categories=true)
+          %}
+          <div style="color: {{ category }};">{{ message }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

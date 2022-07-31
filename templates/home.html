@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/home.css" />
+    <title>The Blog Poster</title>
+  </head>
+  <body>
+    <h1>The Blog Poster</h1>
+    <div class="content">
+      <div class="topic-content">
+        <div class="topics">
+          <h2>Topics</h2>
+          <ul>
+            {% for topic in topics %}
+            <li><a href="/topic/{{ topic.topic_id }}">{{ topic.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="new-topic">
+          <h3>Add a New Topic</h3>
+          <form action="/add/topic" method="POST">
+            <div>
+              <!-- <label for="topic-name">Topic Name</label> -->
+              <input type="text" name="topic-title" placeholder="Add Topic" />
+            </div>
+
+            <input type="submit" value="Add Topic" />
+          </form>
+        </div>
+      </div>
+
+      <div class="message">
+        {% for category, message in get_flashed_messages(with_categories=true)
+        %}
+        <div style="color: {{category}};">{{message}}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
