@@ -1,5 +1,6 @@
 
 
+from crypt import methods
 from flask import Flask , render_template,request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -28,8 +29,8 @@ class Task(db.Model):
     task_id = db.Column(db.Integer, primary_key=True)
     topic_id = db.Column(db.Integer, db.ForeignKey('topics.topic_id'))
     description = db.Column(db.String(length=255))
-
-    topic = db.relationship("Topic")
+    # backref allows associate topic with individual topic
+    topic = db.relationship("Topic", backref='topic')
     
     
 
@@ -66,6 +67,29 @@ def add_task(topic_id):
         db.session.commit()
         flash('Task Added Succesfully', 'lawngreen')
     return redirect(url_for('display_tasks', topic_id=topic_id))
+
+
+# adding delete func for individual tasks (without topic)
+
+@app.route('/delete/task/<task_id>', methods=['POST'])
+def delete_task(task_id):
+    # selects task
+    pending_delete_task = Task.query.filter_by(task_id=task_id).first()
+    target_topic_id = pending_delete_task.topic.topic_id
+    db.session.delete(pending_delete_task)
+    db.session.commit()
+    
+    return redirect(url_for('display_tasks', topic_id=target_topic_id))
+
+
+@app.route('/delete/topic/<topic_id>', methods=['POST'])
+def delete_topic(topic_id):
+    pending_delete_topic = Topic.query.filter_by(topic_id=topic_id).first()
+    db.session.delete(pending_delete_topic)
+    db.session.commit()
+    
+    return redirect(url_for('display_topics'))
+    
 
 
 if __name__ == '__main__':
