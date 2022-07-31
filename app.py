@@ -1,7 +1,6 @@
 
 
-from crypt import methods
-from tkinter import CASCADE
+
 from flask import Flask , render_template,request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
