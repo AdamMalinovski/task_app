@@ -1,6 +1,7 @@
 
 
 from crypt import methods
+from tkinter import CASCADE
 from flask import Flask , render_template,request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -21,6 +22,8 @@ class Topic(db.Model):
 
     topic_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(length=255))
+    # find problem cascade updates task object as topic object getting
+    task = db.relationship('Task', cascade='all, delete-orphan')
     
     
 class Task(db.Model):
