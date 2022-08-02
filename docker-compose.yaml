@@ -1,0 +1,28 @@
+version: '3'
+
+
+volumes:
+  data:
+services:
+  
+  postgres:
+    platform: 
+    - linux/amd64
+    image: postgres:14
+    environment:
+      - POSTGRES_PASSWORD=1234567
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql
+    
+
+  web:
+    platform: 
+     - linux/amd64
+    build: ./api
+    ports:
+      - '5533:5533'
+    restart: always
+
+    

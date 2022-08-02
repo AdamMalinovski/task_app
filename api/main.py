@@ -1,19 +1,60 @@
 
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine
+from sqlalchemy.orm import create_session, session, sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
 
 
 from flask import Flask , render_template,request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 
+engine = create_engine(
+    "postgresql://postgres:1234567@postgres:5432/blog_poster")
+
+Base = declarative_base()
+
+
+class Topic(Base):
+    __tablename__ = 'topics'
+
+    topic_id = Column(Integer, primary_key=True)
+    title = Column(String(length=255))
+
+    def __repr__(self):
+        return "<Topic(topic_id='{0}', title='{1}')>".format(self.topic_id, self.title)
+
+
+class Task(Base):
+    __tablename__ = 'tasks'
+
+    task_id = Column(Integer, primary_key=True)
+    topic_id = Column(Integer, ForeignKey('topics.topic_id'))
+    description = Column(String(length=255))
+
+    topic = relationship('Topic')
+
+    def __repr__(self):
+        return "<Task(description='{0}')>".format(self.description)
+
+
+Base.metadata.create_all(engine)
+
+
+def create_session():
+    session = sessionmaker(bind=engine)
+    return session()
 
 app = Flask(__name__)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://am:1234567@localhost:5432/blog_poster"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1234567@postgres:5432/blog_poster"
 
 app.config['SECRET_KEY'] = '1234567'
 
 db = SQLAlchemy(app)
+
 
 
 class Topic(db.Model):
@@ -23,6 +64,7 @@ class Topic(db.Model):
     title = db.Column(db.String(length=255))
     # find problem cascade updates task object as topic object getting
     task = db.relationship('Task', cascade='all, delete-orphan')
+    
     
     
 class Task(db.Model):
@@ -95,4 +137,14 @@ def delete_topic(topic_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5533)
+    session = create_session()
+
+    flask_server_issue_topic = Topic(title="Flask server is not running")
+    session.add(flask_server_issue_topic)
+    session.commit()
+
+    task = Task(description="Execute the current python script in the terminal",
+                topic_id=flask_server_issue_topic.topic_id)
+    session.add(task)
+    session.commit()
