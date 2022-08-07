@@ -1,5 +1,7 @@
 FROM python:3.8.9
 
+
+
 WORKDIR /app
 
 EXPOSE 5533
@@ -7,7 +9,7 @@ EXPOSE 5533
 COPY Pipfile ./
 COPY Pipfile.lock ./
 
-RUN pip install pipenv
+RUN pip install pipenv 
 
 
 RUN pipenv lock --requirements > requirements.txt

@@ -4,11 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-psycopg2-binary= "*"
+psycopg2-binary= "2.9.3"
 sqlalchemy = "*"
 flask = "*"
 flask-sqlalchemy = "*"
 python-dotenv = "*"
+python-jenkins = "*"
 
 [dev-packages]
 autopep8 = "*"
