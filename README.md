@@ -3,7 +3,7 @@
 
 #### This projects consists of frontend which is written in CSS/HTML and backend python Flask and PostgresSql, 
 
-#### db consists of 2 tables task & topic topic , can have multiple tasks its achieved through foreign key relationship
+#### db consists of 2 tables task & topic, topic  can have multiple tasks its achieved through foreign key relationship
 
 
 ### flask app and postgresql both run as separate images and through docker-compose run as one service
